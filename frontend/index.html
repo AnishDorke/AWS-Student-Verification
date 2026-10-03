@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f7ff">
+  <title>Student Verification | Secure Upload</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --purple: #7c3aed;
+      --cyan: #06b6d4;
+      --green: #059669;
+      --text: #172554;
+      --muted: #64748b;
+      --border: #dbe5f5;
+      --surface: #ffffff;
+      --background: #f4f7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(ellipse at 5% 5%, #dbeafe 0, transparent 32%),
+                  radial-gradient(ellipse at 95% 12%, #ede9fe 0, transparent 30%),
+                  linear-gradient(145deg, #f8fbff, #f2f5ff 55%, #f9f7ff);
+      padding: 32px 20px 24px;
+      overflow-x: hidden;
+    }
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 36px;
+    }
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      flex-shrink: 0;
+      border-radius: 17px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.24);
+    }
+    .brand-icon svg {
+      width: 34px;
+      height: 34px;
+    }
+    .brand-title {
+      margin: 0;
+      font-size: clamp(21px, 3vw, 29px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+    .brand-subtitle {
+      margin: 5px 0 0;
+      color: #6074a1;
+      font-size: 14px;
+      letter-spacing: 1.3px;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 36px;
+      margin-bottom: 34px;
+    }
+    .hero-copy h2 {
+      margin: 0 0 18px;
+      max-width: 550px;
+      font-size: clamp(36px, 5.5vw, 57px);
+      line-height: 1.08;
+      letter-spacing: -2px;
+      font-weight: 850;
+    }
+    .gradient-text {
+      display: block;
+      color: transparent;
+      background: linear-gradient(100deg, #2563eb, #6d28d9, #c026d3);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+    .hero-copy > p {
+      max-width: 480px;
+      margin: 0;
+      color: #526481;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+    .privacy-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 21px;
+      padding: 10px 16px;
+      border: 1px solid #a7f3d0;
+      border-radius: 100px;
+      background: linear-gradient(90deg, #d1fae5, #ccfbf1);
+      color: #047857;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .privacy-pill svg {
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
+    }
+    .hero-art {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      isolation: isolate;
+    }
+    .art-blob {
+      position: absolute;
+      z-index: -1;
+      width: 95%;
+      height: 85%;
+      border-radius: 46% 54% 61% 39% / 43% 38% 62% 57%;
+      background: linear-gradient(135deg, #c7e7ff, #dcd4ff 70%, #e9d5ff);
+      transform: rotate(-5deg);
+    }
+    .id-card {
+      position: relative;
+      width: min(100%, 380px);
+      padding: 20px 22px;
+      border: 6px solid rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      background: linear-gradient(145deg, #ffffff, #edf4ff);
+      box-shadow: 0 20px 45px rgba(56, 91, 180, 0.22);
+      transform: rotate(-3deg);
+      transition: transform 0.3s ease;
+    }
+    .id-card:hover {
+      transform: rotate(0deg) scale(1.02);
+    }
+    .id-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: #2549b9;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .id-seal {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+    }
+    .id-content {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .avatar-wrapper {
+      position: relative;
+      width: 96px;
+      height: 116px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #c7d7f8;
+      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.15);
+      background: linear-gradient(135deg, #e0eaff, #f1e8ff);
+    }
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .id-info-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+    .id-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+      margin-bottom: 2px;
+    }
+    .id-row {
+      display: flex;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #475569;
+    }
+    .id-row strong {
+      width: 58px;
+      flex-shrink: 0;
+      color: #1e3a8a;
+      font-weight: 700;
+    }
+    .id-row span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .verified-badge {
+      position: absolute;
+      right: -10px;
+      bottom: -10px;
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border: 4px solid #fff;
+      border-radius: 50%;
+      color: white;
+      background: linear-gradient(135deg, #10b981, #047857);
+      box-shadow: 0 10px 22px rgba(5, 150, 105, 0.35);
+      transform: rotate(6deg);
+    }
+    .verified-badge svg {
+      width: 28px;
+      height: 28px;
+    }
+    .upload-card {
+      overflow: hidden;
+      border: 1px solid #d9e5ff;
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: 0 18px 50px rgba(52, 84, 160, 0.12);
+    }
+    .upload-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 28px;
+      color: white;
+      background: linear-gradient(105deg, #0ea5e9, #4f46e5 58%, #c026d3);
+    }
+    .upload-header-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, .5);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .17);
+    }
+    .upload-header-icon svg {
+      width: 27px;
+      height: 27px;
+    }
+    .upload-header h3 {
+      margin: 0 0 5px;
+      font-size: 21px;
+    }
+    .upload-header p {
+      margin: 0;
+      color: rgba(255, 255, 255, .88);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .upload-body {
+      padding: 28px;
+    }
+    .field {
+      margin-bottom: 23px;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 10px;
+      color: #1e3261;
+      font-size: 14px;
+      font-weight: 750;
+    }
+    .label-icon {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      border-radius: 8px;
+      color: #2563eb;
+      background: #eff6ff;
+    }
+    .label-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+    input[type="password"] {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      outline: none;
+      border: 1px solid #cbd8ef;
+      border-radius: 9px;
+      color: var(--text);
+      background: #fbfdff;
+      font: inherit;
+      transition: border .2s, box-shadow .2s;
+    }
+    input[type="password"]:focus {
+      border-color: #818cf8;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, .12);
+      background: white;
+    }
+    .drop-zone {
+      position: relative;
+      display: flex;
+      min-height: 165px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      padding: 24px;
+      text-align: center;
+      border: 2px dashed #b5caff;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #f7fbff, #f8f6ff);
+      cursor: pointer;
+      transition: background .2s, border-color .2s, transform .2s;
+    }
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: #818cf8;
+      background: linear-gradient(145deg, #eaf5ff, #f0eaff);
+    }
+    .drop-zone.dragover {
+      transform: scale(1.01);
+    }
+    .cloud-icon {
+      display: grid;
+      place-items: center;
+      width: 47px;
+      height: 47px;
+      border-radius: 14px;
+      color: #2563eb;
+      background: linear-gradient(135deg, #dbeafe, #ede9fe);
+    }
+    .cloud-icon svg {
+      width: 27px;
+      height: 27px;
+    }
+    .drop-title {
+      margin: 0;
+      color: #243e7b;
+      font-size: 15px;
+      font-weight: 750;
+    }
+    .drop-subtitle {
+      margin: 0;
+      color: #7183a8;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .browse-text {
+      color: #4f46e5;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    #document {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      clip-path: inset(50%);
+    }
+    .selected-file {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 49px;
+      margin-top: 13px;
+      padding: 10px 13px;
+      border: 1px solid #e0e8f7;
+      border-radius: 9px;
+      background: #f5f8ff;
+      color: #526481;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+    .file-icon {
+      display: grid;
+      place-items: center;
+      width: 31px;
+      height: 31px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      color: #4f46e5;
+      background: #e4eaff;
+    }
+    .file-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+    #fileName {
+      flex: 1;
+      min-width: 0;
+    }
+    .file-size {
+      color: #8290a9;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .upload-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 54px;
+      margin-top: 24px;
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 11px;
+      color: white;
+      background: linear-gradient(100deg, #0ea5e9, #4f46e5 57%, #c026d3);
+      box-shadow: 0 9px 20px rgba(79, 70, 229, .2);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 750;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, opacity .2s;
+    }
+    .upload-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 13px 27px rgba(79, 70, 229, .28);
+    }
+    .upload-button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .upload-button:disabled {
+      opacity: .65;
+      cursor: wait;
+      box-shadow: none;
+    }
+    .upload-button svg {
+      width: 21px;
+      height: 21px;
+    }
+    .button-spinner {
+      width: 19px;
+      height: 19px;
+      border: 2px solid rgba(255, 255, 255, .45);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #status {
+      display: none;
+      margin: 18px 0 0;
+      padding: 13px 15px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+    #status.visible {
+      display: block;
+    }
+    #status.info {
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+      background: #eff6ff;
+    }
+    #status.success {
+      border-color: #a7f3d0;
+      color: #047857;
+      background: #ecfdf5;
+    }
+    #status.error {
+      border-color: #fecaca;
+      color: #b91c1c;
+      background: #fef2f2;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-top: 25px;
+    }
+    .feature {
+      min-height: 145px;
+      padding: 20px 15px;
+      text-align: center;
+      border: 1px solid #dbe5f5;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .75);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .feature:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(49, 75, 130, .08);
+    }
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 12px;
+      border-radius: 13px;
+      color: white;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      box-shadow: 0 5px 12px rgba(79, 70, 229, .18);
+    }
+    .feature:nth-child(2) .feature-icon {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+    .feature:nth-child(3) .feature-icon {
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+    }
+    .feature:nth-child(4) .feature-icon {
+      background: linear-gradient(135deg, #d946ef, #9333ea);
+    }
+    .feature-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+    .feature h4 {
+      margin: 0 0 7px;
+      font-size: 13px;
+      color: #273b70;
+    }
+    .feature p {
+      margin: 0;
+      color: #71809b;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* Let's Connect Section */
+    .connect-section {
+      margin-top: 36px;
+      padding: 28px 24px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ffffff, #f0f5ff);
+      border: 1px solid #d4e2fc;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.08);
+    }
+    .connect-title {
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 800;
+      color: #172554;
+      letter-spacing: -0.5px;
+    }
+    .connect-subtitle {
+      margin: 0 0 20px;
+      color: #5d7192;
+      font-size: 14px;
+    }
+    .connect-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .connect-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .connect-btn.linkedin {
+      color: #ffffff;
+      background: #0a66c2;
+      box-shadow: 0 6px 18px rgba(10, 102, 194, 0.25);
+    }
+    .connect-btn.linkedin:hover {
+      background: #084e96;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(10, 102, 194, 0.35);
+    }
+    .connect-btn.github {
+      color: #ffffff;
+      background: #1f2937;
+      box-shadow: 0 6px 18px rgba(31, 41, 55, 0.25);
+    }
+    .connect-btn.github:hover {
+      background: #111827;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(31, 41, 55, 0.35);
+    }
+    .connect-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .footer-note {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 24px 0 0;
+      color: #7a89a4;
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.7;
+    }
+    .footer-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #a5b4fc;
+    }
+    @media (max-width: 760px) {
+      body { padding: 22px 14px; }
+      .topbar { margin-bottom: 27px; }
+      .hero { grid-template-columns: 1fr; gap: 24px; margin-bottom: 26px; }
+      .hero-copy h2 { font-size: clamp(36px, 9vw, 49px); }
+      .hero-art { min-height: 240px; }
+      .id-card { width: min(95%, 380px); }
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .upload-header, .upload-body { padding: 21px; }
+    }
+    @media (max-width: 420px) {
+      body { padding: 18px 10px; }
+      .brand-icon { width: 48px; height: 48px; }
+      .brand-title { font-size: 20px; }
+      .brand-subtitle { font-size: 12px; }
+      .upload-header, .upload-body { padding: 17px; }
+      .upload-header h3 { font-size: 18px; }
+      .upload-header p { font-size: 12px; }
+      .drop-zone { min-height: 150px; padding: 17px 10px; }
+      .selected-file { flex-wrap: wrap; }
+      .features { gap: 9px; }
+      .feature { padding: 16px 10px; }
+      .connect-links { flex-direction: column; width: 100%; }
+      .connect-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m2 8 10-5 10 5-10 5L2 8Z" />
+          <path d="M6 10v5c3.5 3 8.5 3 12 0v-5" />
+          <path d="M22 8v7" />
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">Student Verification</h1>
+        <p class="brand-subtitle">SECURE · SIMPLE · FAST</p>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <h2>Upload Your <span class="gradient-text">Student ID</span></h2>
+        <p>Verify your student identity by uploading your student ID document. This is a secure demo for educational purposes only.</p>
+        <div class="privacy-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+          Your documents stays private
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-blob"></div>
+        <div class="id-card">
+          <div class="id-top">
+            <div class="id-seal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m2 8 10-5 10 5-10 5L2 8Z" />
+                <path d="M6 10v5c3.5 3 8.5 3 12 0v-5" />
+              </svg>
+            </div>
+            STUDENT IDENTIFICATION
+          </div>
+          <div class="id-content">
+            <div class="avatar-wrapper">
+              <img src="profile.png" alt="Anish Dorke Photo" class="avatar-img" onerror="this.src='Profile%20pic.png';">
+            </div>
+            <div class="id-info-details">
+              <div class="id-name">Anish Dorke</div>
+              <div class="id-row"><strong>PRN:</strong> <span>2314110126</span></div>
+              <div class="id-row"><strong>Dept:</strong> <span>Computer Engineering</span></div>
+              <div class="id-row"><strong>Email:</strong> <span>dorkeanish@gmail.com</span></div>
+            </div>
+          </div>
+          <div class="verified-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="upload-card">
+      <div class="upload-header">
+        <div class="upload-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+            <path d="M14 2v6h6" />
+            <path d="M12 18v-6" />
+            <path d="m9 15 3-3 3 3" />
+          </svg>
+        </div>
+        <div>
+          <h3>Upload Your Document</h3>
+          <p>Enter your secret key and select a file to upload.</p>
+        </div>
+      </div>
+
+      <div class="upload-body">
+        <form id="uploadForm">
+          <div class="field">
+            <label for="accessCode">
+              <span class="label-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </span>
+              Enter Access key
+            </label>
+            <input id="accessCode" type="password" placeholder="Enter access key allocated by faculty" required autocomplete="off">
+          </div>
+
+          <div class="field">
+            <label for="document">
+              <span class="label-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+                  <path d="M14 2v6h6" />
+                </svg>
+              </span>
+              Select document
+            </label>
+            <label class="drop-zone" id="dropZone" for="document">
+              <span class="cloud-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 16.5A4.5 4.5 0 0 0 18 8h-1.2A7 7 0 1 0 4 14.5" />
+                  <path d="M12 12v9" />
+                  <path d="m8 16 4-4 4 4" />
+                </svg>
+              </span>
+              <p class="drop-title">Drag and drop your file here</p>
+              <p class="drop-subtitle">or <span class="browse-text">click to browse</span><br>Supports PDF, JPG, JPEG, PNG · Maximum size: 5 MiB</p>
+              <input id="document" type="file" accept=".pdf,.png,.jpg,.jpeg" required>
+            </label>
+
+            <div class="selected-file">
+              <span class="file-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+                  <path d="M14 2v6h6" />
+                  <path d="M8 15h8M8 18h5" />
+                </svg>
+              </span>
+              <span id="fileName">No file selected</span>
+              <span class="file-size" id="fileSize"></span>
+            </div>
+          </div>
+
+          <button id="submitButton" class="upload-button" type="submit">
+            <svg id="buttonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 16V4" />
+              <path d="m7 9 5-5 5 5" />
+              <path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
+            </svg>
+            <span id="buttonText">Upload Document</span>
+          </button>
+        </form>
+        <p id="status" role="status" aria-live="polite"></p>
+      </div>
+    </main>
+
+    <section class="features" aria-label="Features">
+      <article class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+        </div>
+        <h4>Secure Upload</h4>
+        <p>Files are uploaded directly to your private S3 bucket.</p>
+      </article>
+
+      <article class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 8v4l3 2" />
+            <circle cx="12" cy="12" r="9" />
+            <path d="m16.5 3.5 2 2" />
+          </svg>
+        </div>
+        <h4>Automatic Processing</h4>
+        <p>Your document is validated and processed automatically.</p>
+      </article>
+
+      <article class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m13 2-3 8H5l6 12 3-8h5L13 2Z" />
+          </svg>
+        </div>
+        <h4>Fast &amp; Reliable</h4>
+        <p>Powered by AWS serverless services for efficient processing.</p>
+      </article>
+
+      <article class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <h4>Demo Only</h4>
+        <p>Use synthetic documents for this educational demonstration.</p>
+      </article>
+    </section>
+
+    <!-- Let's Connect Section -->
+    <section class="connect-section">
+      <h3 class="connect-title">Let's Connect</h3>
+      <p class="connect-subtitle">Feel free to reach out, connect, or explore more of my work!</p>
+      <div class="connect-links">
+        <a href="https://www.linkedin.com/in/anish-dorke-871579367" target="_blank" rel="noopener noreferrer" class="connect-btn linkedin">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.79v8.37H6.46v-8.37M7.86 6.77a1.63 1.63 0 1 0 0 3.25 1.63 1.63 0 0 0 0-3.25Z" />
+          </svg>
+          LinkedIn Profile
+        </a>
+        <a href="https://github.com/AnishDorke" target="_blank" rel="noopener noreferrer" class="connect-btn github">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z" />
+          </svg>
+          GitHub Profile
+        </a>
+      </div>
+    </section>
+
+    <footer class="footer-note">
+      <span>Maximum file size: 5 MiB</span>
+      <span class="footer-dot"></span>
+      <span>Accepted formats: PDF, JPG, JPEG, PNG</span>
+      <span class="footer-dot"></span>
+      <span>Educational demonstration</span>
+    </footer>
+  </div>
+
+  <script>
+    const AUTHORIZER_URL = "function_url_endpoint_link";
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    const allowedTypes = {
+      ".pdf": "application/pdf",
+      ".png": "image/png",
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg"
+    };
+
+    const form = document.getElementById("uploadForm");
+    const statusBox = document.getElementById("status");
+    const button = document.getElementById("submitButton");
+    const buttonText = document.getElementById("buttonText");
+    const buttonIcon = document.getElementById("buttonIcon");
+    const fileInput = document.getElementById("document");
+    const fileName = document.getElementById("fileName");
+    const fileSize = document.getElementById("fileSize");
+    const dropZone = document.getElementById("dropZone");
+
+    function showStatus(message, type = "info") {
+      statusBox.textContent = message;
+      statusBox.className = "visible " + type;
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + " B";
+      if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(1) + " KB";
+      }
+      return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+    }
+
+    function displaySelectedFile(file) {
+      if (!file) {
+        fileName.textContent = "No file selected";
+        fileSize.textContent = "";
+        return;
+      }
+      fileName.textContent = file.name;
+      fileSize.textContent = formatSize(file.size);
+    }
+
+    fileInput.addEventListener("change", function () {
+      displaySelectedFile(fileInput.files[0]);
+    });
+
+    ["dragenter", "dragover"].forEach(function (eventName) {
+      dropZone.addEventListener(eventName, function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        dropZone.classList.add("dragover");
+      });
+    });
+
+    ["dragleave", "drop"].forEach(function (eventName) {
+      dropZone.addEventListener(eventName, function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        dropZone.classList.remove("dragover");
+      });
+    });
+
+    dropZone.addEventListener("drop", function (event) {
+      const files = event.dataTransfer.files;
+      if (!files.length) return;
+      try {
+        const transfer = new DataTransfer();
+        transfer.items.add(files[0]);
+        fileInput.files = transfer.files;
+        displaySelectedFile(files[0]);
+      } catch {
+        showStatus("Please use the file browser to select your document.", "error");
+      }
+    });
+
+    function setLoading(isLoading, text) {
+      button.disabled = isLoading;
+      buttonText.textContent = text;
+      if (isLoading) {
+        buttonIcon.style.display = "none";
+        if (!button.querySelector(".button-spinner")) {
+          const spinner = document.createElement("span");
+          spinner.className = "button-spinner";
+          spinner.setAttribute("aria-hidden", "true");
+          button.insertBefore(spinner, buttonText);
+        }
+      } else {
+        buttonIcon.style.display = "";
+        const spinner = button.querySelector(".button-spinner");
+        if (spinner) spinner.remove();
+        buttonText.textContent = "Upload Document";
+      }
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const file = fileInput.files[0];
+      const accessCode = document.getElementById("accessCode").value;
+
+      if (!file) {
+        showStatus("Please select a document before uploading.", "error");
+        return;
+      }
+
+      if (file.size === 0 || file.size > MAX_FILE_SIZE) {
+        showStatus("File must be between 1 byte and 5 MiB.", "error");
+        return;
+      }
+
+      const filename = file.name.split(/[\\/]/).pop();
+      const dot = filename.lastIndexOf(".");
+      const extension = dot >= 0 ? filename.slice(dot).toLowerCase() : "";
+      const expectedType = allowedTypes[extension];
+
+      if (!expectedType) {
+        showStatus("Only PDF, JPG, JPEG, and PNG files are allowed.", "error");
+        return;
+      }
+
+      if (file.type && file.type !== expectedType) {
+        showStatus("The file extension and browser-reported file type do not match.", "error");
+        return;
+      }
+
+      if (!AUTHORIZER_URL.startsWith("https://")) {
+        showStatus("Please configure the AWS Function URL in the webpage code.", "error");
+        return;
+      }
+
+      setLoading(true, "Requesting authorization...");
+      showStatus("Step 1 of 2: Requesting upload authorization from AWS...", "info");
+
+      try {
+        const authResponse = await fetch(AUTHORIZER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: filename,
+            contentType: expectedType,
+            fileSize: file.size,
+            accessCode: accessCode
+          })
+        });
+
+        let authorization;
+        try {
+          authorization = await authResponse.json();
+        } catch {
+          throw new Error("AWS returned an unreadable response.");
+        }
+
+        if (!authResponse.ok || !authorization.upload) {
+          if (authResponse.status === 401) {
+            throw new Error("Invalid secret key. Please try again.");
+          }
+          throw new Error(authorization.error || "Upload authorization failed.");
+        }
+
+        showStatus("Step 2 of 2: Authorization received. Uploading your document...", "info");
+        setLoading(true, "Uploading document...");
+
+        const uploadData = new FormData();
+        for (const [key, value] of Object.entries(authorization.upload.fields)) {
+          uploadData.append(key, value);
+        }
+        uploadData.append("file", file);
+
+        const uploadResponse = await fetch(authorization.upload.url, {
+          method: "POST",
+          body: uploadData
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error("S3 upload failed with HTTP status " + uploadResponse.status + ".");
+        }
+
+        showStatus("Upload successful! Your document has been received for processing. *\n* Reference: " + authorization.key + " *\n\n* Processing is triggered automatically by S3. Check the processed/ folder in your AWS bucket for the result.", "success");
+        form.reset();
+        displaySelectedFile(null);
+
+      } catch (error) {
+        showStatus("Upload failed: " + error.message + " Check your Function URL, CORS settings, and AWS logs if the issue continues.", "error");
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
